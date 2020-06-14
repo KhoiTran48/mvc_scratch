@@ -9,20 +9,8 @@ class App
 
     public function __construct()
     {
-        new Autoload;
-        $this->router = new Router;
-        $this->router->get("/home/{username}", "HomeController@index");
-        $this->router->get("/user/{username}/{password}", function($username, $pass){
-            echo "Day la trang user<br>";
-            echo "username: " . $username.'<br>';
-        });
-        $this->router->any("/list", function(){
-            echo "Day la trang list";
-        });
-        $this->router->get("*", function(){
-            echo "404 not found";
-        });
-
+        new Autoload(self::$config["rootPath"]);
+        $this->router = new Router(self::$config["basePath"]);
     }
 
     public static function setConfig($config)
@@ -37,6 +25,6 @@ class App
 
     public function run()
     {
-        $this->router ->run();
+        $this->router->run();
     }
 }
