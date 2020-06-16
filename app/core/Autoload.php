@@ -32,7 +32,6 @@ class Autoload
     private function defaultFileLoad()
     {
         return array(
-            // "app/core/Router.php",
             "app/routers.php",
         );
     }

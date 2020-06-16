@@ -1,26 +1,39 @@
 <?php
 
+use app\core\Registry;
 use app\core\Router;
 
 class App
 {
     private $router;
-    private static $config;
+    private static $controller;
+    private static $action;
 
-    public function __construct()
+    public function __construct($config)
     {
-        new Autoload(self::$config["rootPath"]);
-        $this->router = new Router(self::$config["basePath"]);
+        new Autoload($config["rootPath"]);
+        Registry::getInstance()->config = $config;
+        $this->router = new Router($config["basePath"]);
     }
 
-    public static function setConfig($config)
+    public static function setController($controller)
     {
-        self::$config = $config;
+        self::$controller = $controller;
     }
 
-    public static function getConfig()
+    public static function getController()
     {
-        return self::$config;
+        return self::$controller;
+    }
+
+    public static function setAction($action)
+    {
+        self::$action = $action;
+    }
+
+    public static function getAction()
+    {
+        return self::$action;
     }
 
     public function run()
