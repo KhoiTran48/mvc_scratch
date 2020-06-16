@@ -2,6 +2,8 @@
 
 namespace app\core;
 
+use app\core\AppException;
+
 class Router
 {
     private static $routers = array();
@@ -77,26 +79,27 @@ class Router
                 }
             }
         }
-        throw new Exception("no route");
     }
 
     private static function compileRoute($action, $params)
     {
         $controlMix = explode("@", $action);
         if (count($controlMix) != 2) {
-            die("route error");
+            throw new AppException("route error");
         }
         list($class, $method) = $controlMix;
         $classNamespace = "app\\controllers\\{$class}";
         if (class_exists($classNamespace)) {
             $obj = new $classNamespace;
             if (method_exists($classNamespace, $method)) {
+                \App::setController($class);
+                \App::setAction($method);
                 call_user_func_array(array($obj, $method), $params);
             } else {
-                die("Method {$method} not found");
+                throw new AppException("method {$method} not found");
             }
         } else {
-            die("class {$classNamespace} not found");
+            throw new AppException("class {$classNamespace} not found");
         }
     }
 
